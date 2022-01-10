@@ -29,7 +29,7 @@ class MainFrame : JFrame() {
 
             val explicitfunctionPainter = FunctionPainter(plane)
             explicitfunctionPainter.function = { x: Double -> 1 + (x + 2) * (x + 2) }
-
+            explicitfunctionPainter.funColor = cjp1.background
             val implicitfunctionPainter = ImplicitFunctionPainter(
                 plane,
                 tMin.value as Double,
@@ -37,7 +37,7 @@ class MainFrame : JFrame() {
             )
             implicitfunctionPainter.function_x = { t: Double -> asin(sin(t)) }
             implicitfunctionPainter.function_y = { t: Double -> acos(cos(t)) }
-
+            implicitfunctionPainter.funColor = cjp2.background
 
             val painters = mutableListOf(CartesianPainter(plane), explicitfunctionPainter, implicitfunctionPainter)
 
@@ -82,12 +82,14 @@ class MainFrame : JFrame() {
 
             cb2.addMouseListener(object : MouseAdapter() {
                 override fun mouseClicked(e: MouseEvent?) {
+
                     if (cb2.isSelected) {
                         painters.add(implicitfunctionPainter)
                     } else {
                         painters.remove(implicitfunctionPainter)
                     }
                     painters[0] // threads?..
+                    println(painters)
                     mainPanel.repaint()
                 }
             })
