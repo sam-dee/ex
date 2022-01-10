@@ -1,13 +1,15 @@
 package desmos.ui
 
 
-import paints.CartesianPainter
-import paints.CartesianPlane
-import paints.PolyPainterContainer
+import paints.*
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.event.*
 import javax.swing.*
+import kotlin.math.acos
+import kotlin.math.asin
+import kotlin.math.cos
+import kotlin.math.sin
 
 
 class MainFrame : JFrame() {
@@ -62,10 +64,10 @@ class MainFrame : JFrame() {
 //            mainPanel.addMouseWheelListener {
 //                println(it)
 //            }
-            
+
 //            colors mapping
-            listOf(cjp1,cjp2,cjp3).forEach {
-                with(it){
+            listOf(cjp1, cjp2).forEach {
+                with(it) {
                     addMouseListener(object : MouseAdapter() {
                         override fun mouseClicked(e: MouseEvent?) {
                             background = JColorChooser.showDialog(mainPanel, "Выберите цвет", Color.RED)
@@ -78,20 +80,31 @@ class MainFrame : JFrame() {
                 }
             }
 //          check-box mapping
-            cb1.addChangeListener {
-                polyPainter.paint_points = cb1.isSelected
-                mainPanel.repaint()
-            }
+            cb1.addMouseListener(object : MouseAdapter() {
+                override fun mouseClicked(e: MouseEvent?) {
+                    if (cb1.isSelected) {
+                        painters.add(explicitfunctionPainter)
+                    } else {
+                        painters.remove(explicitfunctionPainter)
+                    }
+                    painters[0] // threads?..
+                    mainPanel.repaint()
+                }
+            })
 
-            cb2.addChangeListener {
-                polyPainter.paint_poly = cb2.isSelected
-                mainPanel.repaint()
-            }
 
-            cb3.addChangeListener {
-                polyPainter.paint_deriv = cb3.isSelected
-                mainPanel.repaint()
-            }
+            cb2.addMouseListener(object : MouseAdapter() {
+                override fun mouseClicked(e: MouseEvent?) {
+                    print(cb2.isSelected)
+                    if (cb2.isSelected) {
+                        painters.add(explicitfunctionPainter)
+                    } else {
+                        painters.remove(explicitfunctionPainter)
+                    }
+                    painters[0] // threads?..
+                    mainPanel.repaint()
+                }
+            })
 
             xMin.addChangeListener {
                 xMaxM.minimum = xMin.value as Double + 0.1

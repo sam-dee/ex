@@ -3,23 +3,30 @@ package desmos.ui
 import paints.CartesianPlane
 import java.awt.Color
 import javax.swing.*
+import kotlin.reflect.jvm.internal.impl.builtins.functions.FunctionInvokeDescriptor
 
 class ControlPanel : JPanel() {
     val XMin: JLabel = JLabel("XMin:")
     val XMax: JLabel = JLabel("XMax:")
     val YMin: JLabel = JLabel("YMin:")
     val YMax: JLabel = JLabel("YMax:")
-    val set1: JLabel = JLabel("Отображать точки")
-    val set2: JLabel = JLabel("Отображать график функции")
-    val set3: JLabel = JLabel("Отображать производную")
+    val TMin: JLabel = JLabel("TMin:")
+    val TMax: JLabel = JLabel("TMax:")
+    val set1: JLabel = JLabel("Отображать явно заданную функцию")
+    val set2: JLabel = JLabel("Отображать неявную функцию")
+    val set3: JLabel = JLabel("")
     val xMinM: SpinnerNumberModel = SpinnerNumberModel(-5.0, -100.0, 4.9, 0.1)
     val xMaxM: SpinnerNumberModel = SpinnerNumberModel(5.0, -4.9, 100.0, 0.1)
     val yMinM: SpinnerNumberModel = SpinnerNumberModel(-5.0, -100.0, 4.9, 0.1)
     val yMaxM: SpinnerNumberModel = SpinnerNumberModel(5.0, -4.9, 100.0, 0.1)
+    val tMinM: SpinnerNumberModel = SpinnerNumberModel(-5.0, -100.0, 4.9, 0.1)
+    val tMaxM: SpinnerNumberModel = SpinnerNumberModel(5.0, -4.9, 100.0, 0.1)
     val xMin: JSpinner = JSpinner(xMinM)
     val xMax: JSpinner = JSpinner(xMaxM)
     val yMin: JSpinner = JSpinner(yMinM)
     val yMax: JSpinner = JSpinner(yMaxM)
+    val tMin: JSpinner = JSpinner(tMinM)
+    val tMax: JSpinner = JSpinner(tMaxM)
     val tf: JTextField = JTextField()
     val cb1: JCheckBox = JCheckBox()
     val cb2: JCheckBox = JCheckBox()
@@ -30,29 +37,30 @@ class ControlPanel : JPanel() {
 
 
     init {
-    // region colors
+        // region colors
         background = Color.WHITE
 
         cjp1.background = Color.RED
         cjp2.background = Color.BLUE
-        cjp3.background = Color.GREEN
-    // endregion
+        cjp3.background = Color.WHITE
+        // endregion
 
-    cb2.isSelected = true
+        cb1.isSelected = true
+        cb2.isSelected = true
+        cb3.isVisible = false
 
-    // region layout
+        // region layout
         layout = GroupLayout(this).apply {
             linkSize(XMin, xMin)
             linkSize(XMax, xMax)
             linkSize(YMin, yMin)
             linkSize(YMax, yMax)
+            linkSize(tMax, tMax)
             linkSize(cjp1, cjp2, cjp3, cb1, cb2, cb3)
-
-
             setHorizontalGroup(
                 createSequentialGroup()
                     .addGap(10)
-                    .addGroup(createParallelGroup().addComponent(XMin).addComponent(YMin))
+                    .addGroup(createParallelGroup().addComponent(XMin).addComponent(YMin).addComponent(TMin))
                     .addGroup(
                         createParallelGroup().addComponent(
                             xMin,
@@ -64,10 +72,15 @@ class ControlPanel : JPanel() {
                             GroupLayout.PREFERRED_SIZE,
                             GroupLayout.PREFERRED_SIZE,
                             GroupLayout.PREFERRED_SIZE
+                        ).addComponent(
+                            tMin,
+                            GroupLayout.PREFERRED_SIZE,
+                            GroupLayout.PREFERRED_SIZE,
+                            GroupLayout.PREFERRED_SIZE
                         )
                     )
                     .addGap(10, 20, 20)
-                    .addGroup(createParallelGroup().addComponent(XMax).addComponent(YMax))
+                    .addGroup(createParallelGroup().addComponent(XMax).addComponent(YMax).addComponent(TMax))
                     .addGroup(
                         createParallelGroup().addComponent(
                             xMax,
@@ -76,6 +89,11 @@ class ControlPanel : JPanel() {
                             GroupLayout.PREFERRED_SIZE
                         ).addComponent(
                             yMax,
+                            GroupLayout.PREFERRED_SIZE,
+                            GroupLayout.PREFERRED_SIZE,
+                            GroupLayout.PREFERRED_SIZE
+                        ).addComponent(
+                            tMax,
                             GroupLayout.PREFERRED_SIZE,
                             GroupLayout.PREFERRED_SIZE,
                             GroupLayout.PREFERRED_SIZE
@@ -114,6 +132,22 @@ class ControlPanel : JPanel() {
                                     GroupLayout.PREFERRED_SIZE
                                 )
                         )
+                        .addGap(2)
+                        .addGroup(
+                            createParallelGroup()
+                                .addComponent(TMin)
+                                .addComponent(
+                                    tMin, GroupLayout.PREFERRED_SIZE,
+                                    GroupLayout.PREFERRED_SIZE,
+                                    GroupLayout.PREFERRED_SIZE
+                                )
+                                .addComponent(TMax)
+                                .addComponent(
+                                    tMax, GroupLayout.PREFERRED_SIZE,
+                                    GroupLayout.PREFERRED_SIZE,
+                                    GroupLayout.PREFERRED_SIZE
+                                )
+                        )
                 ).addGroup(
                     createSequentialGroup()
                         .addGroup(
@@ -139,6 +173,6 @@ class ControlPanel : JPanel() {
                 )
             )
         }
-    // endregion
+        // endregion
     }
 }
