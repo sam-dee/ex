@@ -1,6 +1,7 @@
 package paints
 
 import java.awt.*
+import java.lang.NumberFormatException
 import kotlin.math.roundToInt
 
 class CartesianPainter(private val plane: CartesianPlane) : Painter {
@@ -27,7 +28,15 @@ class CartesianPainter(private val plane: CartesianPlane) : Painter {
         }
     }
 
-    fun Double.format(digits: Int) = "%.${digits}f".format(this).toDouble()
+    fun Double.format(digits: Int): Double {
+        val str = "%.${digits}f".format(this)
+        try {
+            return str.toDouble()
+        } catch (e: NumberFormatException) {
+            return str.replace(",", ".").toDouble()
+        }
+    }
+
 
     fun PaintXs(g: Graphics) {
         with(plane) {
