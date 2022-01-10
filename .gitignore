@@ -23,6 +23,6 @@
 hs_err_pid*
 
 #Idea specific
-.idea
+#.idea
 out
-*.iml
+#*.iml
